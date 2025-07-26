@@ -1,0 +1,111 @@
+{
+  "name": "gemini-linter",
+  "displayName": "Gemini校正・校閲ツール",
+  "description": "Gemini AIを使用したテキストの校正、校閲、評価を行うVSCode拡張機能",
+  "version": "0.0.7",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.102.0",
+    "node": ">=20.0.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:gemini-linter.proofread",
+    "onCommand:gemini-linter.edit",
+    "onCommand:gemini-linter.evaluate"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "gemini-linter.proofread",
+        "title": "校正",
+        "category": "Gemini"
+      },
+      {
+        "command": "gemini-linter.edit",
+        "title": "校閲",
+        "category": "Gemini"
+      },
+      {
+        "command": "gemini-linter.evaluate",
+        "title": "評価",
+        "category": "Gemini"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "gemini-linter.proofread",
+          "when": "editorHasSelection",
+          "group": "gemini@1"
+        },
+        {
+          "command": "gemini-linter.edit",
+          "when": "editorHasSelection",
+          "group": "gemini@2"
+        },
+        {
+          "command": "gemini-linter.evaluate",
+          "when": "editorHasSelection",
+          "group": "gemini@3"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Gemini校正・校閲ツール",
+      "properties": {
+        "geminiLinter.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Gemini API キー",
+          "markdownDescription": "Gemini API キーを設定してください。[API キーの取得方法](https://ai.google.dev/)"
+        },
+        "geminiLinter.model": {
+          "type": "string",
+          "default": "gemini-2.5-flash",
+          "enum": [
+            "gemini-2.5-pro",
+            "gemini-2.5-flash",
+            "gemini-2.5-flash-lite",
+            "gemini-2.0-flash",
+            "gemini-2.0-flash-lite"
+          ],
+          "description": "使用するGeminiモデル",
+          "enumDescriptions": [
+            "最高性能モデル（思考機能付き）",
+            "高速・高性能モデル（思考機能付き）",
+            "軽量・高速モデル",
+            "次世代マルチモーダルモデル",
+            "軽量版次世代モデル"
+          ]
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint . --ext .ts,.js",
+    "lint:fix": "eslint . --ext .ts,.js --fix",
+    "format": "prettier --write \"src/**/*.{ts,js,json}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,js,json}\""
+  },
+  "devDependencies": {
+    "@types/node": "^24.1.0",
+    "@types/vscode": "^1.102.0",
+    "@typescript-eslint/eslint-plugin": "^8.38.0",
+    "@typescript-eslint/parser": "^8.38.0",
+    "eslint": "^9.32.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.3",
+    "prettier": "^3.6.2",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@google/genai": "^1.11.0"
+  }
+}
