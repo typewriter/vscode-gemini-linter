@@ -2,7 +2,11 @@ import { GoogleGenAI } from '@google/genai';
 import * as vscode from 'vscode';
 
 export class GeminiService {
-    private getPrompt(type: 'proofread' | 'edit' | 'evaluate', text: string): string {
+    private getPrompt(
+        type: 'proofread' | 'edit' | 'evaluate',
+        text: string,
+        startLine?: number
+    ): string {
         const prompts = {
             proofread: `あなたは経験豊富な校正者です。以下のテキストを校正してください。
 
@@ -14,6 +18,7 @@ export class GeminiService {
 
 【出力形式】
 修正箇所を具体的に示し、修正理由も簡潔に説明してください。
+${startLine ? `指摘箇所には行番号を「${startLine}行目」のように明記してください（テキストの最初の行を${startLine}行目として数えてください）。` : ''}
 
 テキスト:
 ${text}`,
@@ -28,6 +33,7 @@ ${text}`,
 
 【出力形式】
 改善提案を具体例とともに示してください。
+${startLine ? `指摘箇所には行番号を「${startLine}行目」のように明記してください（テキストの最初の行を${startLine}行目として数えてください）。` : ''}
 
 テキスト:
 ${text}`,
@@ -45,6 +51,7 @@ ${text}`,
 ・改善点（3点以内）
 ・総合評価（5段階）
 ・具体的な改善提案
+${startLine ? `指摘箇所には行番号を「${startLine}行目」のように明記してください（テキストの最初の行を${startLine}行目として数えてください）。` : ''}
 
 テキスト:
 ${text}`,
@@ -56,13 +63,14 @@ ${text}`,
     async analyzeText(
         text: string,
         type: 'proofread' | 'edit' | 'evaluate',
-        apiKey: string
+        apiKey: string,
+        startLine?: number
     ): Promise<string> {
         const config = vscode.workspace.getConfiguration('geminiLinter');
         const model = config.get<string>('model') || 'gemini-2.5-flash';
 
         const ai = new GoogleGenAI({ apiKey });
-        const prompt = this.getPrompt(type, text);
+        const prompt = this.getPrompt(type, text, startLine);
 
         try {
             const response = await ai.models.generateContent({

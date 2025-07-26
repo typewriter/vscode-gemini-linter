@@ -81,6 +81,19 @@
             "次世代マルチモーダルモデル",
             "軽量版次世代モデル"
           ]
+        },
+        "geminiLinter.displayMode": {
+          "type": "string",
+          "default": "preview",
+          "enum": [
+            "preview",
+            "output"
+          ],
+          "description": "結果の表示方法",
+          "enumDescriptions": [
+            "サイドパネルにMarkdownプレビューとして表示",
+            "従来通りOutput Channelに表示"
+          ]
         }
       }
     }
@@ -95,6 +108,7 @@
     "format:check": "prettier --check \"src/**/*.{ts,js,json}\""
   },
   "devDependencies": {
+    "@types/marked": "^5.0.2",
     "@types/node": "^24.1.0",
     "@types/vscode": "^1.102.0",
     "@typescript-eslint/eslint-plugin": "^8.38.0",
@@ -106,6 +120,7 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@google/genai": "^1.11.0"
+    "@google/genai": "^1.11.0",
+    "marked": "^16.1.1"
   }
 }
